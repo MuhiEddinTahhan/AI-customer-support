@@ -1,9 +1,15 @@
 'use client'
-import { Box, Stack, TextField, Button, Typography } from "@mui/material";
+import { Box, Stack, TextField, Button, Typography, CircularProgress  } from "@mui/material";
+import { getFirestore, collection, getDocs, QuerySnapshot, query, onSnapshot, deleteDoc, doc, where, addDoc } from 'firebase/firestore';
+import {db} from "./firebase"
 import Image from "next/image";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { UserAuth } from "./context/AuthContext";
+import { resolve } from "styled-jsx/css";
 
 export default function Home() {
+  const {user} = UserAuth()
+  const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState([{
     role: 'assistant',
     content: 'Hi! I\'m your assitant for your cybersecurity certification preparation, how can I assist you today?'
@@ -50,6 +56,34 @@ export default function Home() {
     })
   }
 
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      setLoading(false)
+    }
+    checkAuthentication()
+  }, [user])
+
+  //add chat to database
+  const addChat = async (e) => {
+    await addDoc(collection(db, 'chat')), {
+      message, messages
+    }
+  }
+
+  // useEffect(() => {
+  //   const q = query (collection(db, 'chat'))
+  //   const unsubscribe = onSnapshot (q, (querySnapshot) => {
+  //     let history = []
+
+  //     querySnapshot.forEach((doc) => {
+  //       history.push({...doc.data, id: doc.id})
+  //     })
+  //     setMessages(history)
+  //     return () => unsubscribe() 
+  //   })
+  // }, [user])
+
   return (
     <Box
       width='100vw'
@@ -68,8 +102,10 @@ export default function Home() {
         borderRadius={4}
         overflow="hidden"
         bgcolor={'background.paper'}
-      >
-        <Stack
+      >{loading ? (<Box display={'flex'} justifyContent={'center'} height={'100vh'}>
+        <CircularProgress></CircularProgress>
+    </Box>) :
+        user ? (<Stack
           direction={'column'}
           height={'100%'}
           p={2}
@@ -118,9 +154,6 @@ export default function Home() {
               variant="outlined"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              // onKeyPress={(e) => {
-              //   if (e.key === 'Enter') sendMessage();
-              // }}
             />
             <Button
               variant="contained"
@@ -131,7 +164,11 @@ export default function Home() {
               Send
             </Button>
           </Stack>
-        </Stack>
+        </Stack>) : (
+          <Typography variant="h6" color="textPrimary" gutterBottom>
+            You must be logged in to view this page
+          </Typography>
+        )}
       </Box>
     </Box>
   );
