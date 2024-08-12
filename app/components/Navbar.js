@@ -39,9 +39,6 @@ const Navbar = () => {
               <Button component={Link} href="/" sx={{ textTransform: "none", marginRight: 2 }}>
                 Home
               </Button>
-              <Button component={Link} href="/about" sx={{ textTransform: "none", marginRight: 2 }}>
-                About
-              </Button>
               <Button component={Link} href="/profile" sx={{ textTransform: "none" }}>
                 Profile
               </Button>
