@@ -101,86 +101,94 @@ export default function Home() {
       flexDirection={'column'}
       justifyContent={'center'}
       alignItems={'center'}
-      bgcolor={'#f5f5f5'}
+      bgcolor={'#e0e0e0'} 
     >
       <Box
-        width={'100%'}
-        maxWidth={'600px'}
-        height={'700px'}
+        width={'80%'}
+        height={'80%'}
         boxShadow={3}
-        borderRadius={4}
+        borderRadius={8} 
         overflow="hidden"
-        bgcolor={'background.paper'}
-      >{loading ? (<Box display={'flex'} justifyContent={'center'} height={'100vh'}>
-        <CircularProgress></CircularProgress>
-    </Box>) :
-        user ? (<Stack
-          direction={'column'}
-          height={'100%'}
-          p={2}
-          spacing={3}
-        >
+        bgcolor={'#ffffff'} 
+        p={4} 
+      >
+        {loading ? (
+          <Box display={'flex'} justifyContent={'center'} alignItems={'center'} height={'100%'}>
+            <CircularProgress />
+          </Box>
+        ) : user ? (
           <Stack
-            direction={"column"}
-            spacing={2}
-            flexGrow={1}
-            overflow={"auto"}
-            sx={{
-              '&::-webkit-scrollbar': {
-                width: '0.4em',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: 'rgba(0,0,0,.1)',
-                borderRadius: '8px',
-              },
-            }}
+            direction={'column'}
+            height={'100%'}
+            spacing={4} 
           >
-            {messages.map((message, index) => (
-              <Box
-                key={index}
-                display={"flex"}
-                justifyContent={message.role === "assistant" ? "flex-start" : "flex-end"}
-              >
-                <Box
-                  bgcolor={message.role === "assistant" ? "primary.main" : "secondary.main"}
-                  color="white"
-                  borderRadius={16}
-                  p={2}
-                  maxWidth={'75%'}
-                  boxShadow={2}
-                >
-                  <Typography variant="body1">
-                    {message.content}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
-          </Stack>
-          <Stack direction={"row"} spacing={2}>
-            <TextField
-              label="Type your message..."
-              fullWidth
-              variant="outlined"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={sendMassage}
-              sx={{ borderRadius: 2 }}
+            <Stack
+              direction={"column"}
+              spacing={3} 
+              flexGrow={1}
+              overflow={"auto"}
+              sx={{
+                '&::-webkit-scrollbar': {
+                  width: '0.4em',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: 'rgba(0,0,0,.1)',
+                  borderRadius: '8px',
+                },
+              }}
             >
-              Send
-            </Button>
-            {/* <Button variant="contained" color="primary" onClick={addChat} sx={{borderRadius: 2}}>Save Chat</Button> */}
+              {messages.map((message, index) => (
+                <Box
+                  key={index}
+                  display={"flex"}
+                  justifyContent={message.role === "assistant" ? "flex-start" : "flex-end"}
+                >
+                  <Box
+                    bgcolor={message.role === "assistant" ? "#3f51b5" : "#f50057"} 
+                    color="white"
+                    borderRadius={16}
+                    p={2.5} 
+                    maxWidth={'75%'}
+                    boxShadow={3}
+                  >
+                    <Typography variant="body1" fontSize={'1.1rem'}> 
+                      {message.content}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
+            <Stack direction={"row"} spacing={2}>
+              <TextField
+                label="Type your message..."
+                fullWidth
+                variant="outlined"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                sx={{
+                  borderRadius: 2,
+                  fontSize: '1rem', 
+                }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={sendMassage}
+                sx={{ 
+                  borderRadius: 2, 
+                  padding: '10px 20px', 
+                  fontSize: '1rem' 
+                }}
+              >
+                Send
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
-        ) : (
+        ) : (<Box justifyContent={'center'} alignment={'center'} display={'flex'} height={'100%'} p={40}>
           <Typography variant="h6" color="textPrimary" gutterBottom>
             You must be logged in to view this page
           </Typography>
-        )}
-        
+        </Box>)}
       </Box>
     </Box>
   );
