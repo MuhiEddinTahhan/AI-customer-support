@@ -1,6 +1,6 @@
 'use client'
 import { Box, Stack, TextField, Button, Typography, CircularProgress  } from "@mui/material";
-import { getFirestore, collection, getDocs, QuerySnapshot, query, onSnapshot, deleteDoc, doc, where, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, QuerySnapshot, query, onSnapshot, deleteDoc, doc, where, addDoc, Timestamp } from 'firebase/firestore';
 import {db} from "./firebase"
 import Image from "next/image";
 import { useEffect, useState } from 'react';
@@ -65,10 +65,19 @@ export default function Home() {
   }, [user])
 
   //add chat to database
-  const addChat = async (e) => {
-    await addDoc(collection(db, 'chat')), {
-      message, messages
-    }
+  const addChatUser = async (message) => {
+    await addDoc(collection(db, user.uid), {
+      role: 'user',
+      content: message,
+      timestamp: new Date()
+    })
+  }
+    const addChatBot = async (message) => {
+    await addDoc(collection(db, user.uid), {
+      role: 'assistant',
+      content: message,
+      timestamp: new Date()
+    })
   }
 
   // useEffect(() => {
@@ -163,12 +172,15 @@ export default function Home() {
             >
               Send
             </Button>
+            {/* <Button variant="contained" color="primary" onClick={addChat} sx={{borderRadius: 2}}>Save Chat</Button> */}
           </Stack>
-        </Stack>) : (
+        </Stack>
+        ) : (
           <Typography variant="h6" color="textPrimary" gutterBottom>
             You must be logged in to view this page
           </Typography>
         )}
+        
       </Box>
     </Box>
   );
